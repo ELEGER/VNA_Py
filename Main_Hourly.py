@@ -21,8 +21,8 @@ rm = visa.ResourceManager()
 #Use the IP address of a remote machine to connect to it instead
 # à condition que ce port soit ouvert
 
-os.system("./CMT_RVNA_20.2.3_x86_64.appimage &")
-time.sleep(20)# faut 20 sec
+#os.system("./CMT_RVNA_20.2.3_x86_64.appimage &")
+#time.sleep(20)# faut 20 sec
 
 try:
     CMT = rm.open_resource('TCPIP0::localhost::5025::SOCKET') 
@@ -62,8 +62,8 @@ CMT.query('*IDN?\n')
 
 f_start_MHz = 200
 f_stop_MHz  = 5000
-bWidth_Hz   = 30000
-nb_points   = 201 # 401 801 1601 
+bWidth_Hz   = 10000
+nb_points   = 801 # 401 801 1601 
 
 Specs=pd.DataFrame(columns=['f_start_MHz','f_stop_MHz','bWidth_Hz','nb_points'])
 Specs['f_start_MHz']=[f_start_MHz]
@@ -103,17 +103,22 @@ hour   = datetime_object.hour
 minute = datetime_object.minute
 
 # nom du répértoire est la date-heure de mesure
-Filename='Bloub'
-directory_name = 'What_'+str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' + str(minute)+ '_min'
+#Filename='Bloub'
+#directory_name = 'What_'+str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' + str(minute)+ '_min'
+
+directory_name='Essai_2'
+Filename = str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' + str(minute)+ '_min'
+
+
+
 
 #création du dossier
 os.getcwd()
-os.mkdir(str(directory_name))
-#os.chdir(str(directory_name))
+#os.mkdir(str(directory_name))
+os.chdir('/home/el/Codes/VNA/')
 
 # nombre de mesure à effectuer à chaque activation: 100
-number_of_measurement= 1
-data=pd.DataFrame(columns=['Freq','RS11','IS11','Time'])
+data=pd.DataFrame(columns=['Freq','RS11','IS11','Temps'])
 
 delay=3 #3secondes...
 
@@ -127,9 +132,9 @@ S11_real_T=[]
 S11_imag_T=[]
 S11=[]
 Timing=[]
-Temps=0
+Temps=month*30*24*60+day*24*60+hour*60+minute
 
-number_of_measurement= 10000
+number_of_measurement= 10
 for o in range(int(number_of_measurement)):
     #Trigger a measurement
     CMT.write_ascii_values('TRIG:SEQ:SING\n',values) #Trigger a single sweep
@@ -160,16 +165,17 @@ for o in range(int(number_of_measurement)):
     #        out_str = str(Freq[i]) + ',' +  str(S11_real[i]) + ',' +  str(S11_imag[i]) + '\n'
     #        out_file.write(out_str)
     #    out_file.close()
-    print('Delay')
-    time.sleep(delay)
-    Temps=Temps+delay
+    #print('Delay')
+    #time.sleep(delay)
+    #Temps=Temps+delay
 #%% FAut sauver
 
 data['Freq']=Freq_T
 data['RS11']=S11_real_T
 data['IS11']=S11_imag_T
+data['Temps']=Timing
 
 data.to_csv('./'+directory_name+'/Data_'+Filename+'.csv',float_format='%.8f',index=False)
 Specs.to_csv('./'+directory_name+'/Specs_'+Filename+'.csv',float_format='%.8f',index=False)
-os.system("shutdown /s /t 1")
+#os.system("shutdown /s /t 1")
 

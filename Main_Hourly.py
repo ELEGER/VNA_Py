@@ -106,7 +106,7 @@ minute = datetime_object.minute
 #Filename='Bloub'
 #directory_name = 'What_'+str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' + str(minute)+ '_min'
 
-directory_name='Essai_2'
+directory_name='Essai_nuit'
 Filename = str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' + str(minute)+ '_min'
 
 
@@ -115,7 +115,7 @@ Filename = str(year) + '_' + str(month)+ '_' + str(day)+ '_' + str(hour)+ 'h_' +
 #création du dossier
 os.getcwd()
 #os.mkdir(str(directory_name))
-os.chdir('/home/el/Codes/VNA/')
+os.chdir('/home/el/Codes/Pilotage_VNA_CopperMountain/')
 
 # nombre de mesure à effectuer à chaque activation: 100
 data=pd.DataFrame(columns=['Freq','RS11','IS11','Temps'])
